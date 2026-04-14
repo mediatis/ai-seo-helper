@@ -96,6 +96,15 @@ class ContentService
     /**
      * @throws GuzzleException
      */
+    protected function getApiEndpoint(): string
+    {
+        $provider = $this->extConf['aiProvider'] ?? 'openai';
+        if ($provider === 'openrouter') {
+            return 'https://openrouter.ai/api/v1/chat/completions';
+        }
+        return 'https://api.openai.com/v1/chat/completions';
+    }
+
     public function requestAi(string $content, $extConfPromptPrefix, $extConfReplaceText, $languageIsoCode): array
     {
         $jsonContent = [
@@ -115,7 +124,7 @@ class ContentService
         ];
 
         $response = $this->requestFactory->request(
-            'https://api.openai.com/v1/chat/completions',
+            $this->getApiEndpoint(),
             'POST',
             [
                 'headers' => [
