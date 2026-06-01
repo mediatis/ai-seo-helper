@@ -59,3 +59,12 @@ openAiPromptPrefixNewsAlternativeTitle = Suggest page title ideas in bullet poin
 openAiPromptPrefixNewsKeywords = Extract seo keywords from this news article. Return the result in a comma separated list.
 # cat=news; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:replaceTextNewsKeywords
 replaceTextNewsKeywords = SEO keywords:
+
+# cat=field translation//10; type=boolean; label=Enable field translation: Adds an AI translate button to localizable text fields of translated records (translates from the language parent).
+enableFieldTranslation = 0
+# cat=field translation//20; type=string; label=Translatable tables: Comma separated list of tables whose localizable text fields get a translate button.
+translatableTables = tt_content
+# cat=field translation//30; type=string; label=Field denylist: Comma separated list of fields (field or table.field) that must never receive a translate button.
+translateFieldDenylist =
+# cat=field translation//40; type=string; label=Translate prompt prefix: Instruction sent to the AI. The target language name and the source text are appended automatically.
+openAiPromptPrefixTranslate = Translate the following text to

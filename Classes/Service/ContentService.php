@@ -26,12 +26,14 @@ class ContentService
     protected PageRepository $pageRepository;
     protected RequestFactory $requestFactory;
     protected SiteMatcher $siteMatcher;
+    protected AiClient $aiClient;
 
 
     public function __construct(
         PageRepository       $pageRepository,
         SiteMatcher          $siteMatcher,
         RequestFactory       $requestFactory,
+        AiClient             $aiClient,
         array                $languages,
         array                $extConf
     )
@@ -39,6 +41,7 @@ class ContentService
         $this->pageRepository = $pageRepository;
         $this->siteMatcher = $siteMatcher;
         $this->requestFactory = $requestFactory;
+        $this->aiClient = $aiClient;
         $this->languages = $languages;
         $this->extConf = $extConf;
     }
@@ -93,57 +96,16 @@ class ContentService
         }
     }
 
-    /**
-     * @throws GuzzleException
-     */
-    protected function getApiEndpoint(): string
-    {
-        $provider = $this->extConf['aiProvider'] ?? 'openai';
-        if ($provider === 'openrouter') {
-            return 'https://openrouter.ai/api/v1/chat/completions';
-        }
-        return 'https://api.openai.com/v1/chat/completions';
-    }
-
     public function requestAi(string $content, $extConfPromptPrefix, $extConfReplaceText, $languageIsoCode): array
     {
-        $jsonContent = [
-            "model" => $this->extConf['openAiModel'],
-            "temperature" => (float)$this->extConf['openAiTemperature'],
-            "max_tokens" => (int)$this->extConf['openAiMaxTokens'],
-            "top_p" => (float)$this->extConf['openAiTopP'],
-            "frequency_penalty" => (float)$this->extConf['openAiFrequencyPenalty'],
-            "presence_penalty" => (float)$this->extConf['openAiPresencePenalty'],
-            "response_format" => ['type' => 'json_object'],
-            "messages" => [
-                [
-                    'role' => 'user',
-                    'content' => $this->extConf[$extConfPromptPrefix] . ' in ' . $this->languages[$languageIsoCode] . ":\n\n" . trim($content) . "\n\n Return at least five suggestions and return the response as array in valid JSON format.",
-                ]
+        $messages = [
+            [
+                'role' => 'user',
+                'content' => $this->extConf[$extConfPromptPrefix] . ' in ' . $this->languages[$languageIsoCode] . ":\n\n" . trim($content) . "\n\n Return at least five suggestions and return the response as array in valid JSON format.",
             ]
         ];
 
-        $response = $this->requestFactory->request(
-            $this->getApiEndpoint(),
-            'POST',
-            [
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->extConf['openAiApiKey']
-                ],
-                'json' => $jsonContent
-            ]
-        );
-
-        $resJsonBody = $response->getBody()->getContents();
-        $resBody = json_decode($resJsonBody, true);
-
-        $rawContent = $resBody['choices'][0]['message']['content'] ?? null;
-        if ($rawContent === null) {
-            throw new \RuntimeException('AI request failed: ' . substr((string)$resJsonBody, 0, 500));
-        }
-        // Some providers (e.g. Anthropic via OpenRouter) wrap the JSON in ```json ... ``` fences
-        $rawContent = preg_replace('/^\s*```(?:json)?\s*|\s*```\s*$/i', '', trim($rawContent));
+        $rawContent = $this->aiClient->chat($messages, ['response_format' => ['type' => 'json_object']]);
         $metadataResponse = json_decode($rawContent, true);
         if (!is_array($metadataResponse)) {
             throw new \RuntimeException('AI response was not valid JSON: ' . substr($rawContent, 0, 500));

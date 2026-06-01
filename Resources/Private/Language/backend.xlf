@@ -111,6 +111,30 @@
             <trans-unit id="AiSeoHelper.noValidAiResponse" resname="AiSeoHelper.noValidAiResponse">
                 <source>Could not fetch valid response from AI. Please try again.</source>
             </trans-unit>
+            <trans-unit id="AiSeoHelper.translate.button" resname="AiSeoHelper.translate.button">
+                <source>Translate from default language</source>
+            </trans-unit>
+            <trans-unit id="AiSeoHelper.translate.start" resname="AiSeoHelper.translate.start">
+                <source>Translating</source>
+            </trans-unit>
+            <trans-unit id="AiSeoHelper.translate.start.info" resname="AiSeoHelper.translate.start.info">
+                <source>Translation is in progress. Please wait...</source>
+            </trans-unit>
+            <trans-unit id="AiSeoHelper.translate.previewHeader" resname="AiSeoHelper.translate.previewHeader">
+                <source>Suggested translation</source>
+            </trans-unit>
+            <trans-unit id="AiSeoHelper.translate.accept" resname="AiSeoHelper.translate.accept">
+                <source>Accept translation</source>
+            </trans-unit>
+            <trans-unit id="AiSeoHelper.translate.reject" resname="AiSeoHelper.translate.reject">
+                <source>Discard</source>
+            </trans-unit>
+            <trans-unit id="AiSeoHelper.translate.applied" resname="AiSeoHelper.translate.applied">
+                <source>Translation applied</source>
+            </trans-unit>
+            <trans-unit id="AiSeoHelper.translate.missingParameters" resname="AiSeoHelper.translate.missingParameters">
+                <source>Missing translation parameters.</source>
+            </trans-unit>
             <trans-unit id="AiSeoHelper.tx_aiseohelper_domain_model_customlanguage" resname="AiSeoHelper.tx_aiseohelper_domain_model_customlanguage">
                 <source>Custom language</source>
             </trans-unit>

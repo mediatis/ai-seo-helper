@@ -6,6 +6,7 @@ namespace Passionweb\AiSeoHelper\Controller\Ajax;
 
 use GuzzleHttp\Exception\GuzzleException;
 use Passionweb\AiSeoHelper\Service\ContentService;
+use Passionweb\AiSeoHelper\Service\TranslationService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -18,11 +19,14 @@ class AiController
 {
     protected ContentService $contentService;
 
+    protected TranslationService $translationService;
+
     protected LoggerInterface $logger;
 
-    public function __construct(ContentService $contentService, LoggerInterface $logger)
+    public function __construct(ContentService $contentService, TranslationService $translationService, LoggerInterface $logger)
     {
         $this->contentService = $contentService;
+        $this->translationService = $translationService;
         $this->logger = $logger;
     }
 
@@ -78,6 +82,40 @@ class AiController
     public function generateAbstractAction(ServerRequestInterface $request): ResponseInterface
     {
         return $this->generateSuggestions($request, 'Abstract');
+    }
+
+    public function translateFieldAction(ServerRequestInterface $request): ResponseInterface
+    {
+        $response = new Response();
+        $parsedBody = (array)($request->getParsedBody() ?? []);
+        try {
+            $table = (string)($parsedBody['table'] ?? '');
+            $uid = (int)($parsedBody['uid'] ?? 0);
+            $field = (string)($parsedBody['field'] ?? '');
+            if ($table === '' || $uid <= 0 || $field === '') {
+                throw new \RuntimeException(
+                    (string)LocalizationUtility::translate('LLL:EXT:ai_seo_helper/Resources/Private/Language/backend.xlf:AiSeoHelper.translate.missingParameters'),
+                    1717000020
+                );
+            }
+
+            $isRichtextHint = array_key_exists('isRichtext', $parsedBody)
+                ? filter_var($parsedBody['isRichtext'], FILTER_VALIDATE_BOOLEAN)
+                : null;
+            $result = $this->translationService->translateField($table, $uid, $field, $isRichtextHint);
+            $response->getBody()->write((string)json_encode([
+                'success' => true,
+                'output' => $result['output'],
+                'isRichtext' => $result['isRichtext'],
+            ]));
+            return $response;
+        } catch (GuzzleException $e) {
+            return $this->logGuzzleError($e, $response);
+        } catch (\Throwable $e) {
+            $this->logger->error($e->getMessage());
+            $response->getBody()->write((string)json_encode(['success' => false, 'error' => $e->getMessage()]));
+            return $response;
+        }
     }
 
     private function generateResponse(ServerRequestInterface $request, string $extConfPrompt, string $extConfReplaceText): ResponseInterface

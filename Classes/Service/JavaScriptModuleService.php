@@ -14,6 +14,7 @@ class JavaScriptModuleService
         if ($typo3Version->getMajorVersion() > 11) {
             $resultArray['javaScriptModules'] = [
                 JavaScriptModuleInstruction::create('@passionweb/ai-seo-helper/Helper/generate-suggestions.js'),
+                JavaScriptModuleInstruction::create('@passionweb/ai-seo-helper/Helper/translate.js'),
             ];
             if(ExtensionManagementUtility::isLoaded('news')) {
                 $resultArray['javaScriptModules'][] = JavaScriptModuleInstruction::create('@passionweb/ai-seo-helper/Helper/news-generate-suggestions.js');

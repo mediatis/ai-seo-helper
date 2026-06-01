@@ -70,3 +70,15 @@ if(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
     ];
 }
 
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['nodeRegistry'][1717000000] = [
+    'nodeName' => 'aiTranslate',
+    'priority' => 30,
+    'class' => \Passionweb\AiSeoHelper\FormEngine\FieldControl\AiTranslate::class,
+];
+
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['formEngine']['formDataGroup']['tcaDatabaseRecord'][\Passionweb\AiSeoHelper\DataProvider\AddAiTranslateControl::class] = [
+    'depends' => [
+        \TYPO3\CMS\Backend\Form\FormDataProvider\TcaColumnsProcessFieldDescriptions::class,
+    ],
+];
+

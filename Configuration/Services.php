@@ -48,8 +48,24 @@ return static function (ContainerConfigurator $containerConfigurator, ContainerB
         ->arg('$languages', new ReferenceConfigurator('CustomLanguageArray'))
         ->arg('$extConf', new ReferenceConfigurator('ExtConf.aiSeoHelper'));
 
+    $services->set(\Passionweb\AiSeoHelper\Service\FieldTranslationEligibility::class)
+        ->arg('$extConf', new ReferenceConfigurator('ExtConf.aiSeoHelper'));
+
+    $services->set(\Passionweb\AiSeoHelper\Service\AiClient::class)
+        ->arg('$extConf', new ReferenceConfigurator('ExtConf.aiSeoHelper'));
+
+    $services->set(\Passionweb\AiSeoHelper\Service\TranslationService::class)
+        ->arg('$languages', new ReferenceConfigurator('CustomLanguageArray'))
+        ->arg('$extConf', new ReferenceConfigurator('ExtConf.aiSeoHelper'));
+
+    // FormEngine instantiates data providers via GeneralUtility::makeInstance(), which
+    // only resolves constructor dependencies for public services.
+    $services->set(\Passionweb\AiSeoHelper\DataProvider\AddAiTranslateControl::class)
+        ->public();
+
     $services->set(AiController::class)
         ->arg('$contentService', new ReferenceConfigurator(ContentService::class))
+        ->arg('$translationService', new ReferenceConfigurator(\Passionweb\AiSeoHelper\Service\TranslationService::class))
         ->arg('$logger', new ReferenceConfigurator('PsrLogInterface'))
         ->public();
 

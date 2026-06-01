@@ -45,4 +45,8 @@ return [
         'path' => '/generate/news-keywords',
         'target' => \Passionweb\AiSeoHelper\Controller\Ajax\AiController::class . '::generateNewsKeywordsAction'
     ],
+    'aiseohelper_translate' => [
+        'path' => '/ai-seo-helper/translate-field',
+        'target' => \Passionweb\AiSeoHelper\Controller\Ajax\AiController::class . '::translateFieldAction'
+    ],
 ];
