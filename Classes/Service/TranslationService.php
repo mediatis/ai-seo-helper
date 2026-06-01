@@ -100,7 +100,7 @@ class TranslationService
      */
     protected function requestTranslation(string $sourceText, string $targetLanguageName, bool $isRichtext): string
     {
-        $promptPrefix = trim((string)($this->extConf['openAiPromptPrefixTranslate'] ?? 'Translate the following text to'));
+        $promptPrefix = trim((string)($this->extConf['aiPromptPrefixTranslate'] ?? 'Translate the following text to'));
         $formatHint = $isRichtext
             ? ' Preserve all HTML markup and structure exactly and translate only the human-readable text. Return only the translated HTML without code fences or commentary.'
             : ' Return only the translated text, without surrounding quotes or commentary.';
@@ -115,7 +115,7 @@ class TranslationService
         // Faithful translation: low temperature, and enough room for long bodytext.
         $translated = $this->aiClient->chat($messages, [
             'temperature' => 0.2,
-            'max_tokens' => max((int)$this->extConf['openAiMaxTokens'], 1500),
+            'max_tokens' => max((int)$this->extConf['aiMaxTokens'], 1500),
             'frequency_penalty' => 0.0,
             'presence_penalty' => 0.0,
         ]);

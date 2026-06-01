@@ -1,47 +1,47 @@
 # cat=API Provider; type=options[OpenAI=openai,OpenRouter=openrouter]; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiProvider
 aiProvider = openai
 
-# cat=API Key; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:openAiApiKey
-openAiApiKey =
+# cat=API Key; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiApiKey
+aiApiKey =
 
-# cat=basic request settings; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:openAiModel
-openAiModel = gpt-4-0125-preview
-# cat=basic request settings; type=double+; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:openAiTemperature
-openAiTemperature = 0.5
-# cat=basic request settings; type=int+; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:openAiMaxTokens
-openAiMaxTokens = 275
-# cat=basic request settings; type=int+; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:openAiTopP
-openAiTopP = 1
-# cat=basic request settings; type=double; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:openAiFrequencyPenalty
-openAiFrequencyPenalty = 0.8
-# cat=basic request settings; type=double; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:openAiPresencePenalty
-openAiPresencePenalty = 0
+# cat=basic request settings; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiModel
+aiModel = gpt-4-0125-preview
+# cat=basic request settings; type=double+; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiTemperature
+aiTemperature = 0.5
+# cat=basic request settings; type=int+; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiMaxTokens
+aiMaxTokens = 275
+# cat=basic request settings; type=int+; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiTopP
+aiTopP = 1
+# cat=basic request settings; type=double; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiFrequencyPenalty
+aiFrequencyPenalty = 0.8
+# cat=basic request settings; type=double; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiPresencePenalty
+aiPresencePenalty = 0
 # cat=basic request settings; type=boolean; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:useUrlForRequest
 useUrlForRequest = 0
 
-# cat=meta description; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:openAiPromptPrefixMetaDescription
-openAiPromptPrefixMetaDescription = Extract five seo meta descriptions in a bullet point list, each seo meta description in one short sentence and with a maximum of 150 characters or less, for the content of
+# cat=meta description; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiPromptPrefixMetaDescription
+aiPromptPrefixMetaDescription = Extract five seo meta descriptions in a bullet point list, each seo meta description in one short sentence and with a maximum of 150 characters or less, for the content of
 
-#cat=page title; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:openAiPromptPrefixPageTitle
-openAiPromptPrefixPageTitle = Suggest page title ideas in bullet point list for
+#cat=page title; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiPromptPrefixPageTitle
+aiPromptPrefixPageTitle = Suggest page title ideas in bullet point list for
 
-# cat=keywords; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:openAiPromptPrefixKeywords
-openAiPromptPrefixKeywords = Extract seo keywords from this text. Return the result in a comma separated list.
+# cat=keywords; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiPromptPrefixKeywords
+aiPromptPrefixKeywords = Extract seo keywords from this text. Return the result in a comma separated list.
 # cat=keywords; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:replaceTextKeywords
 replaceTextKeywords = SEO keywords:
 
-#cat=open graph; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:openAiPromptPrefixOgTitle
-openAiPromptPrefixOgTitle = Suggest Open Graph title ideas in bullet point list for
-#cat=open graph; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:openAiPromptPrefixOgDescription
-openAiPromptPrefixOgDescription = Extract five Open Graph descriptions in a bullet point list, each Open Graph description in one short sentence and with a maximum of 150 characters or less, for the content of
+#cat=open graph; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiPromptPrefixOgTitle
+aiPromptPrefixOgTitle = Suggest Open Graph title ideas in bullet point list for
+#cat=open graph; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiPromptPrefixOgDescription
+aiPromptPrefixOgDescription = Extract five Open Graph descriptions in a bullet point list, each Open Graph description in one short sentence and with a maximum of 150 characters or less, for the content of
 
-#cat=twitter; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:openAiPromptPrefixTwitterTitle
-openAiPromptPrefixTwitterTitle = Suggest Twitter title ideas in bullet point list for
-#cat=twitter; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:openAiPromptPrefixTwitterDescription
-openAiPromptPrefixTwitterDescription = Extract five Twitter descriptions in a bullet point list, each Twitter description in one short sentence and with a maximum of 150 characters or less, for the content of
+#cat=twitter; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiPromptPrefixTwitterTitle
+aiPromptPrefixTwitterTitle = Suggest Twitter title ideas in bullet point list for
+#cat=twitter; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiPromptPrefixTwitterDescription
+aiPromptPrefixTwitterDescription = Extract five Twitter descriptions in a bullet point list, each Twitter description in one short sentence and with a maximum of 150 characters or less, for the content of
 
-#cat=abstract; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:openAiPromptPrefixAbstract
-openAiPromptPrefixAbstract = Extract five summaries in a bullet point list, each summary in one short sentence and with a maximum of 150 characters or less, for the content of
+#cat=abstract; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiPromptPrefixAbstract
+aiPromptPrefixAbstract = Extract five summaries in a bullet point list, each summary in one short sentence and with a maximum of 150 characters or less, for the content of
 
 # cat=open graph and twitter; type=boolean; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:pageTitleForOgAndTwitter
 pageTitleForOgAndTwitter = 0
@@ -51,12 +51,12 @@ metaDescriptionForOgAndTwitter = 0
 #cat=news; type=int+; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:singleNewsDisplayPage
 singleNewsDisplayPage = 1
 
-# cat=news; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:openAiPromptPrefixNewsMetaDescription
-openAiPromptPrefixNewsMetaDescription = Extract five seo meta descriptions in a bullet point list, each seo meta description in one short sentence and with a maximum of 150 characters or less, for the content of
-# cat=news; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:openAiPromptPrefixNewsAlternativeTitle
-openAiPromptPrefixNewsAlternativeTitle = Suggest page title ideas in bullet point list for
-# cat=news; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:openAiPromptPrefixNewsKeywords
-openAiPromptPrefixNewsKeywords = Extract seo keywords from this news article. Return the result in a comma separated list.
+# cat=news; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiPromptPrefixNewsMetaDescription
+aiPromptPrefixNewsMetaDescription = Extract five seo meta descriptions in a bullet point list, each seo meta description in one short sentence and with a maximum of 150 characters or less, for the content of
+# cat=news; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiPromptPrefixNewsAlternativeTitle
+aiPromptPrefixNewsAlternativeTitle = Suggest page title ideas in bullet point list for
+# cat=news; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:aiPromptPrefixNewsKeywords
+aiPromptPrefixNewsKeywords = Extract seo keywords from this news article. Return the result in a comma separated list.
 # cat=news; type=string; label=LLL:EXT:ai_seo_helper/Resources/Private/Language/ext_conf.xlf:replaceTextNewsKeywords
 replaceTextNewsKeywords = SEO keywords:
 
@@ -67,4 +67,4 @@ translatableTables = tt_content
 # cat=field translation//30; type=string; label=Field denylist: Comma separated list of fields (field or table.field) that must never receive a translate button.
 translateFieldDenylist =
 # cat=field translation//40; type=string; label=Translate prompt prefix: Instruction sent to the AI. The target language name and the source text are appended automatically.
-openAiPromptPrefixTranslate = Translate the following text to
+aiPromptPrefixTranslate = Translate the following text to

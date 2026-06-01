@@ -13,12 +13,12 @@ class SelectedModelFactory
             return true;
         }
 
-        return  $extConf['openAiModel'] === 'gpt-3.5-turbo-1106' ||
-                $extConf['openAiModel'] === 'gpt-3.5-turbo' ||
-                $extConf['openAiModel'] === 'gpt-3.5-turbo-0125' ||
-                $extConf['openAiModel'] === 'gpt-4-1106-preview' ||
-                $extConf['openAiModel'] === 'gpt-4-turbo-preview' ||
-                $extConf['openAiModel'] === 'gpt-4-turbo' ||
-                $extConf['openAiModel'] === 'gpt-4o-mini';
+        return  $extConf['aiModel'] === 'gpt-3.5-turbo-1106' ||
+                $extConf['aiModel'] === 'gpt-3.5-turbo' ||
+                $extConf['aiModel'] === 'gpt-3.5-turbo-0125' ||
+                $extConf['aiModel'] === 'gpt-4-1106-preview' ||
+                $extConf['aiModel'] === 'gpt-4-turbo-preview' ||
+                $extConf['aiModel'] === 'gpt-4-turbo' ||
+                $extConf['aiModel'] === 'gpt-4o-mini';
     }
 }

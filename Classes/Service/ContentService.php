@@ -125,7 +125,7 @@ class ContentService
      */
     public function getContentForSuggestions(ServerRequestInterface $request, string $type): string
     {
-        $suggestions = $this->getContentFromAi($request, 'openAiPromptPrefix' . $type);
+        $suggestions = $this->getContentFromAi($request, 'aiPromptPrefix' . $type);
         $flatSuggestions = [];
         array_walk_recursive($suggestions, function($value) use (&$flatSuggestions) {
             $flatSuggestions[] = $value;

@@ -52,12 +52,12 @@ class AiClient
     {
         $payload = array_merge(
             [
-                'model' => $this->extConf['openAiModel'],
-                'temperature' => (float)$this->extConf['openAiTemperature'],
-                'max_tokens' => (int)$this->extConf['openAiMaxTokens'],
-                'top_p' => (float)$this->extConf['openAiTopP'],
-                'frequency_penalty' => (float)$this->extConf['openAiFrequencyPenalty'],
-                'presence_penalty' => (float)$this->extConf['openAiPresencePenalty'],
+                'model' => $this->extConf['aiModel'],
+                'temperature' => (float)$this->extConf['aiTemperature'],
+                'max_tokens' => (int)$this->extConf['aiMaxTokens'],
+                'top_p' => (float)$this->extConf['aiTopP'],
+                'frequency_penalty' => (float)$this->extConf['aiFrequencyPenalty'],
+                'presence_penalty' => (float)$this->extConf['aiPresencePenalty'],
                 'messages' => $messages,
             ],
             $overrides
@@ -69,7 +69,7 @@ class AiClient
             [
                 'headers' => [
                     'Content-Type' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->extConf['openAiApiKey'],
+                    'Authorization' => 'Bearer ' . $this->extConf['aiApiKey'],
                 ],
                 'json' => $payload,
             ]

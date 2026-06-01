@@ -42,12 +42,12 @@ class AiController
 
     public function generateKeywordsAction(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->generateResponse($request, 'openAiPromptPrefixKeywords', 'replaceTextKeywords');
+        return $this->generateResponse($request, 'aiPromptPrefixKeywords', 'replaceTextKeywords');
     }
 
     public function generateNewsKeywordsAction(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->generateResponse($request, 'openAiPromptPrefixNewsKeywords', 'replaceTextNewsKeywords');
+        return $this->generateResponse($request, 'aiPromptPrefixNewsKeywords', 'replaceTextNewsKeywords');
     }
 
     public function generatePageTitleAction(ServerRequestInterface $request): ResponseInterface
