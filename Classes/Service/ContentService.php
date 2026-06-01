@@ -137,13 +137,23 @@ class ContentService
 
         $resJsonBody = $response->getBody()->getContents();
         $resBody = json_decode($resJsonBody, true);
-        $metadataResponse = json_decode($resBody['choices'][0]['message']['content'], true);
-        if(is_array($metadataResponse) && count($metadataResponse) > 1){
-            return $metadataResponse;
-        } else {
-            $key = array_key_first($metadataResponse);
-            return $metadataResponse[$key];
+
+        $rawContent = $resBody['choices'][0]['message']['content'] ?? null;
+        if ($rawContent === null) {
+            throw new \RuntimeException('AI request failed: ' . substr((string)$resJsonBody, 0, 500));
         }
+        // Some providers (e.g. Anthropic via OpenRouter) wrap the JSON in ```json ... ``` fences
+        $rawContent = preg_replace('/^\s*```(?:json)?\s*|\s*```\s*$/i', '', trim($rawContent));
+        $metadataResponse = json_decode($rawContent, true);
+        if (!is_array($metadataResponse)) {
+            throw new \RuntimeException('AI response was not valid JSON: ' . substr($rawContent, 0, 500));
+        }
+
+        if (count($metadataResponse) > 1) {
+            return $metadataResponse;
+        }
+        $key = array_key_first($metadataResponse);
+        return is_array($metadataResponse[$key]) ? $metadataResponse[$key] : $metadataResponse;
     }
 
     /**
