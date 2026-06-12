@@ -20,6 +20,7 @@ interface TranslatorInterface
      * @param SiteLanguage|null $sourceLanguage language of the parent record (null lets the provider auto-detect)
      * @param bool $isRichtext whether the field contains RTE HTML that must be preserved
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \RuntimeException when the translation backend rejects the request or returns an unusable response
      */
     public function translate(string $sourceText, SiteLanguage $targetLanguage, ?SiteLanguage $sourceLanguage, bool $isRichtext): string;
 }
