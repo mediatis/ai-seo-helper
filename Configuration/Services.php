@@ -54,8 +54,14 @@ return static function (ContainerConfigurator $containerConfigurator, ContainerB
     $services->set(\Passionweb\AiSeoHelper\Service\AiClient::class)
         ->arg('$extConf', new ReferenceConfigurator('ExtConf.aiSeoHelper'));
 
-    $services->set(\Passionweb\AiSeoHelper\Service\TranslationService::class)
+    $services->set(\Passionweb\AiSeoHelper\Service\Translation\AiTranslator::class)
         ->arg('$languages', new ReferenceConfigurator('CustomLanguageArray'))
+        ->arg('$extConf', new ReferenceConfigurator('ExtConf.aiSeoHelper'));
+
+    $services->set(\Passionweb\AiSeoHelper\Service\Translation\DeepLTranslator::class)
+        ->arg('$extConf', new ReferenceConfigurator('ExtConf.aiSeoHelper'));
+
+    $services->set(\Passionweb\AiSeoHelper\Service\TranslationService::class)
         ->arg('$extConf', new ReferenceConfigurator('ExtConf.aiSeoHelper'));
 
     // FormEngine instantiates data providers via GeneralUtility::makeInstance(), which
