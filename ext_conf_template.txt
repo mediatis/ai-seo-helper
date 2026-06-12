@@ -68,3 +68,14 @@ translatableTables = tt_content
 translateFieldDenylist =
 # cat=field translation//40; type=string; label=Translate prompt prefix: Instruction sent to the AI. The target language name and the source text are appended automatically.
 aiPromptPrefixTranslate = Translate the following text to
+# cat=field translation//50; type=options[AI (OpenAI / OpenRouter)=ai,DeepL=deepl]; label=Translation provider: Backend used for the field translation flow. SEO suggestion features always use the AI provider configured above.
+translationProvider = ai
+
+# cat=DeepL//10; type=string; label=DeepL API key: Keys ending in ":fx" automatically use the DeepL API Free endpoint.
+deeplApiKey =
+# cat=DeepL//20; type=options[default=default,more=more,less=less,prefer_more=prefer_more,prefer_less=prefer_less]; label=Formality: Formal/informal tone for supported target languages (e.g. DE/FR). The "prefer_" variants fall back gracefully for unsupported languages instead of failing.
+deeplFormality = default
+# cat=DeepL//30; type=string; label=Translation memory id: UUID of a DeepL translation memory to apply (requires a DeepL API Pro key and forces the quality-optimized model). Empty = plain DeepL translation.
+deeplTranslationMemoryId =
+# cat=DeepL//40; type=int+; label=Translation memory threshold: Minimum match percentage (0-100) for memory segments to be applied.
+deeplTranslationMemoryThreshold = 75

@@ -538,3 +538,21 @@ If you try to use the GPT-4 model without access you currently get a 404 error m
 I'm grateful for any feedback! Be it suggestions for improvement, extension requests or just a (constructive) feedback on how good or crappy the extension is.
 
 Feel free to send me your feedback to [service@passionweb.de](mailto:service@passionweb.de "Send Feedback") or [contact me on Slack](https://typo3.slack.com/team/U02FG49J4TG "Contact me on Slack")
+
+## DeepL translation provider
+
+The field translation flow (the "translate" button on localized records) can
+run against DeepL instead of the AI chat provider. SEO suggestion features
+always use the AI provider.
+
+| Setting | Meaning |
+| --- | --- |
+| `translationProvider` | `ai` (default) or `deepl` |
+| `deeplApiKey` | DeepL API key. Keys ending in `:fx` automatically use the free endpoint (`api-free.deepl.com`). |
+| `deeplFormality` | `default`, `more`, `less`, `prefer_more`, `prefer_less` — tone for target languages that support formality (e.g. DE/FR). |
+| `deeplTranslationMemoryId` | Optional UUID of a DeepL translation memory. Requires a Pro key; forces DeepL's quality-optimized model. List memories via `GET https://api.deepl.com/v3/translation_memories`. Memories are created/filled in the DeepL web account. |
+| `deeplTranslationMemoryThreshold` | Minimum match percentage (default 75) for memory segments. |
+
+Rich-text fields are sent with `tag_handling=html`, so HTML markup is
+preserved. Errors (invalid key, exhausted quota) surface as backend
+notifications; there is no silent fallback to the AI provider.
