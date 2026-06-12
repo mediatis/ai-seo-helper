@@ -4,40 +4,40 @@ declare(strict_types=1);
 
 namespace Passionweb\AiSeoHelper\Service;
 
+use Passionweb\AiSeoHelper\Service\Translation\AiTranslator;
+use Passionweb\AiSeoHelper\Service\Translation\DeepLTranslator;
+use Passionweb\AiSeoHelper\Service\Translation\TranslatorInterface;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Routing\SiteMatcher;
-use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Translates a single standard field of a translated record from its language
- * parent into the record's own language using the configured AI provider.
+ * parent into the record's own language using the configured translation
+ * backend (AI chat provider or DeepL).
  */
 class TranslationService
 {
-    protected AiClient $aiClient;
+    protected AiTranslator $aiTranslator;
+    protected DeepLTranslator $deepLTranslator;
     protected FieldTranslationEligibility $eligibility;
-
-    /** @var array<string, string> */
-    protected array $languages;
 
     /** @var array<string, mixed> */
     protected array $extConf;
 
     /**
-     * @param array<string, string> $languages
      * @param array<string, mixed> $extConf
      */
     public function __construct(
-        AiClient $aiClient,
+        AiTranslator $aiTranslator,
+        DeepLTranslator $deepLTranslator,
         FieldTranslationEligibility $eligibility,
-        array $languages,
         array $extConf
     ) {
-        $this->aiClient = $aiClient;
+        $this->aiTranslator = $aiTranslator;
+        $this->deepLTranslator = $deepLTranslator;
         $this->eligibility = $eligibility;
-        $this->languages = $languages;
         $this->extConf = $extConf;
     }
 
@@ -83,62 +83,39 @@ class TranslationService
             throw new \RuntimeException('The language parent field is empty; nothing to translate.', 1717000015);
         }
 
-        $targetLanguageName = $this->resolveLanguageName($table, $uid, $targetLanguageId);
+        $site = $this->resolveSite($table, $uid);
+        if (!$site instanceof Site) {
+            throw new \RuntimeException('Could not determine the site of the record.', 1718000004);
+        }
+        try {
+            $targetLanguage = $site->getLanguageById($targetLanguageId);
+        } catch (\InvalidArgumentException $e) {
+            throw new \RuntimeException('Could not resolve the target site language.', 1718000005, $e);
+        }
+        try {
+            $sourceLanguage = $site->getLanguageById(0);
+        } catch (\InvalidArgumentException $e) {
+            $sourceLanguage = null;
+        }
+
         // RTE can be enabled per content type via columnsOverrides, so the static base-column
         // TCA is unreliable; trust the client's DOM-derived hint when present.
         $staticRichtext = ($fieldTca['config']['type'] ?? '') === 'text' && !empty($fieldTca['config']['enableRichtext']);
         $isRichtext = $isRichtextHint ?? $staticRichtext;
 
         return [
-            'output' => $this->requestTranslation($sourceText, $targetLanguageName, $isRichtext),
+            'output' => $this->getTranslator()->translate($sourceText, $targetLanguage, $sourceLanguage, $isRichtext),
             'isRichtext' => $isRichtext,
         ];
     }
 
-    /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    protected function requestTranslation(string $sourceText, string $targetLanguageName, bool $isRichtext): string
+    protected function getTranslator(): TranslatorInterface
     {
-        $promptPrefix = trim((string)($this->extConf['aiPromptPrefixTranslate'] ?? 'Translate the following text to'));
-        $formatHint = $isRichtext
-            ? ' Preserve all HTML markup and structure exactly and translate only the human-readable text. Return only the translated HTML without code fences or commentary.'
-            : ' Return only the translated text, without surrounding quotes or commentary.';
-
-        $messages = [
-            [
-                'role' => 'user',
-                'content' => $promptPrefix . ' ' . $targetLanguageName . '.' . $formatHint . "\n\n" . $sourceText,
-            ],
-        ];
-
-        // Faithful translation: low temperature, and enough room for long bodytext.
-        $translated = $this->aiClient->chat($messages, [
-            'temperature' => 0.2,
-            'max_tokens' => max((int)$this->extConf['aiMaxTokens'], 1500),
-            'frequency_penalty' => 0.0,
-            'presence_penalty' => 0.0,
-        ]);
-
-        return trim($translated);
+        $provider = (string)($this->extConf['translationProvider'] ?? 'ai');
+        return $provider === 'deepl' ? $this->deepLTranslator : $this->aiTranslator;
     }
 
-    protected function resolveLanguageName(string $table, int $uid, int $languageId): string
-    {
-        $siteLanguage = $this->resolveSiteLanguage($table, $uid, $languageId);
-        if (!$siteLanguage instanceof SiteLanguage) {
-            return (string)$languageId;
-        }
-
-        $typo3Version = new Typo3Version();
-        $code = $typo3Version->getMajorVersion() > 11
-            ? $siteLanguage->getLocale()->getLanguageCode()
-            : $siteLanguage->getTwoLetterIsoCode();
-
-        return $this->languages[$code] ?? $siteLanguage->getTitle();
-    }
-
-    protected function resolveSiteLanguage(string $table, int $uid, int $languageId): ?SiteLanguage
+    protected function resolveSite(string $table, int $uid): ?Site
     {
         $pid = $this->resolvePageId($table, $uid);
         if ($pid <= 0) {
@@ -148,7 +125,7 @@ class TranslationService
             $siteMatcher = GeneralUtility::makeInstance(SiteMatcher::class);
             $rootLine = BackendUtility::BEgetRootLine($pid);
             $site = $siteMatcher->matchByPageId($pid, $rootLine);
-            return $site->getLanguageById($languageId);
+            return $site instanceof Site ? $site : null;
         } catch (\Throwable $e) {
             return null;
         }
