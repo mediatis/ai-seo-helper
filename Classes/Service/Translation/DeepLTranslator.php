@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Passionweb\AiSeoHelper\Service\Translation;
 
 use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Exception\GuzzleException;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
@@ -89,6 +90,12 @@ class DeepLTranslator implements TranslatorInterface
             );
         } catch (BadResponseException $e) {
             throw $this->toReadableException($e);
+        } catch (GuzzleException $e) {
+            throw new \RuntimeException(
+                'DeepL request could not be completed (network error): ' . $e->getMessage(),
+                1718000006,
+                $e
+            );
         }
 
         $rawBody = $response->getBody()->getContents();
@@ -101,7 +108,7 @@ class DeepLTranslator implements TranslatorInterface
         return trim($translated);
     }
 
-    public function getApiEndpoint(string $apiKey): string
+    protected function getApiEndpoint(string $apiKey): string
     {
         // DeepL API Free keys are marked with the ":fx" suffix.
         $host = str_ends_with($apiKey, ':fx') ? 'https://api-free.deepl.com' : 'https://api.deepl.com';
