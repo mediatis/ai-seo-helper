@@ -75,7 +75,7 @@ translationProvider = ai
 deeplApiKey =
 # cat=DeepL//20; type=options[default=default,more=more,less=less,prefer_more=prefer_more,prefer_less=prefer_less]; label=Formality: Formal/informal tone for supported target languages (e.g. DE/FR). The "prefer_" variants fall back gracefully for unsupported languages instead of failing.
 deeplFormality = default
-# cat=DeepL//30; type=string; label=Translation memory id: UUID of a DeepL translation memory to apply (requires a DeepL API Pro key and forces the quality-optimized model). Empty = plain DeepL translation.
+# cat=DeepL//30; type=string; label=Translation memory id(s): Per-language map of DeepL translation memory UUIDs, e.g. "DE:uuid1,FR:uuid2" (a memory is bound to one target language). Keys accept plain (DE) or regional (EN-US) codes; a bare UUID applies to all languages. Requires a DeepL API Pro key and forces the quality-optimized model. Empty = plain DeepL translation.
 deeplTranslationMemoryId =
 # cat=DeepL//40; type=int+; label=Translation memory threshold: Minimum match percentage (0-100) for memory segments to be applied.
 deeplTranslationMemoryThreshold = 75

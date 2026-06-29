@@ -13,10 +13,13 @@ use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 /**
  * Translation backend using the DeepL API (https://developers.deepl.com).
  *
- * Supports DeepL translation memories: when a memory id is configured, DeepL
- * applies stored segment matches above the configured threshold (requires a
- * Pro key and forces the quality-optimized model). Rich text is translated
- * with DeepL HTML tag handling so markup survives verbatim.
+ * Supports DeepL translation memories: when a memory id is configured for the
+ * current target language, DeepL applies stored segment matches above the
+ * configured threshold (requires a Pro key and forces the quality-optimized
+ * model). Because a memory is bound to one source/target pair, the id is
+ * resolved per target language from a language map (see resolveMemoryId()).
+ * Rich text is translated with DeepL HTML tag handling so markup survives
+ * verbatim.
  */
 class DeepLTranslator implements TranslatorInterface
 {
@@ -66,7 +69,7 @@ class DeepLTranslator implements TranslatorInterface
             $payload['formality'] = $formality;
         }
 
-        $memoryId = trim((string)($this->extConf['deeplTranslationMemoryId'] ?? ''));
+        $memoryId = $this->resolveMemoryId($payload['target_lang']);
         if ($memoryId !== '') {
             // Translation memories are only applied by DeepL's quality-optimized (next-gen) models.
             $payload['model_type'] = 'quality_optimized';
@@ -106,6 +109,58 @@ class DeepLTranslator implements TranslatorInterface
         }
 
         return trim($translated);
+    }
+
+    /**
+     * Resolves the translation memory id to apply for a given DeepL target_lang.
+     *
+     * A DeepL translation memory is bound to a single source/target language pair,
+     * so each target language needs its own memory. The configuration therefore
+     * accepts a comma-separated language map, e.g.
+     *
+     *     DE:30b6932b-...,FR:6e3e4993-...
+     *
+     * Keys may be a plain language code (DE, FR) or a regional variant (EN-US,
+     * de-de) and are matched case-insensitively. A bare uuid without a language
+     * key acts as the default for every target language (backwards compatible
+     * with the previous single-id configuration).
+     */
+    protected function resolveMemoryId(string $targetLang): string
+    {
+        $raw = trim((string)($this->extConf['deeplTranslationMemoryId'] ?? ''));
+        if ($raw === '') {
+            return '';
+        }
+
+        $targetLang = strtoupper($targetLang);
+        $baseLang = explode('-', $targetLang)[0];
+
+        $default = '';
+        $byVariant = [];
+        $byLanguage = [];
+        foreach (explode(',', $raw) as $segment) {
+            $segment = trim($segment);
+            if ($segment === '') {
+                continue;
+            }
+            if (!str_contains($segment, ':')) {
+                // Bare uuid without a language key: default for all languages.
+                $default = $segment;
+                continue;
+            }
+            [$key, $id] = explode(':', $segment, 2);
+            $key = strtoupper(trim($key));
+            $id = trim($id);
+            if ($key === '' || $id === '') {
+                continue;
+            }
+            $byVariant[$key] = $id;
+            $base = explode('-', $key)[0];
+            // First entry wins so an explicit variant key is not overwritten.
+            $byLanguage[$base] = $byLanguage[$base] ?? $id;
+        }
+
+        return $byVariant[$targetLang] ?? $byLanguage[$baseLang] ?? $default;
     }
 
     protected function getApiEndpoint(string $apiKey): string
